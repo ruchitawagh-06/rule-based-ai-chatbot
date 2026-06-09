@@ -1102,6 +1102,7 @@
                 "inheritance": "Inheritance is an OOP concept where one class can reuse properties and methods from another class.",
                 "internet": "The internet is a global network that connects computers and devices around the world.",
                 "interpreter": "An interpreter runs code step by step instead of compiling the whole program first.",
+                "java": "Java is a high-level, object-oriented programming language used for applications, Android development, backend systems, and enterprise software.",
                 "javascript": "JavaScript is a programming language used to make web pages interactive and dynamic.",
                 "json": "JSON is a lightweight data format commonly used to exchange data between applications and APIs.",
                 "loop": "A loop repeats a block of code multiple times.",
@@ -1117,6 +1118,25 @@
                 "variable": "A variable is a named place used to store a value in a program.",
                 "website": "A website is a collection of web pages that users can access through a browser.",
                 "weather": "Weather describes the current condition of the atmosphere, including temperature, rain, wind, clouds, and humidity."
+            };
+
+            const generalKnowledgeBank = {
+                "capital of india": "The capital of India is New Delhi.",
+                "india capital": "The capital of India is New Delhi.",
+                "pm of india": "The Prime Minister of India is Narendra Modi.",
+                "prime minister of india": "The Prime Minister of India is Narendra Modi.",
+                "current pm of india": "The Prime Minister of India is Narendra Modi.",
+                "president of india": "The President of India is Droupadi Murmu.",
+                "national animal of india": "The national animal of India is the Bengal tiger.",
+                "national bird of india": "The national bird of India is the Indian peacock.",
+                "national flower of india": "The national flower of India is the lotus.",
+                "national fruit of india": "The national fruit of India is the mango.",
+                "national currency of india": "The currency of India is the Indian Rupee.",
+                "largest state of india": "The largest state of India by area is Rajasthan.",
+                "smallest state of india": "The smallest state of India by area is Goa.",
+                "father of nation india": "Mahatma Gandhi is known as the Father of the Nation in India.",
+                "who is mahatma gandhi": "Mahatma Gandhi was a leader of India's freedom movement and is known for non-violence.",
+                "who is apj abdul kalam": "Dr. A. P. J. Abdul Kalam was a scientist and the 11th President of India. He is also known as the Missile Man of India."
             };
 
             const spellingCorrections = {
@@ -1241,22 +1261,61 @@
                 const cleanedTerm = text
                     .replace(/^what is\s+/, "")
                     .replace(/^what are\s+/, "")
+                    .replace(/^who is\s+/, "")
                     .replace(/^define\s+/, "")
                     .replace(/^explain\s+/, "")
                     .replace(/^meaning of\s+/, "")
                     .replace(/[?]/g, "")
                     .trim();
 
+                if (generalKnowledgeBank[cleanedTerm]) {
+                    return generalKnowledgeBank[cleanedTerm];
+                }
+
                 if (definitionBank[cleanedTerm]) {
                     return definitionBank[cleanedTerm];
                 }
 
-                const matchedTerm = Object.keys(definitionBank).find(function (term) {
-                    return cleanedTerm.includes(term) || text.includes(" " + term + " ");
-                });
+                const matchedGeneralTerm = Object.keys(generalKnowledgeBank)
+                    .sort(function (a, b) {
+                        return b.length - a.length;
+                    })
+                    .find(function (term) {
+                        return new RegExp("\\b" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(cleanedTerm);
+                    });
+
+                if (matchedGeneralTerm) {
+                    return generalKnowledgeBank[matchedGeneralTerm];
+                }
+
+                const matchedTerm = Object.keys(definitionBank)
+                    .sort(function (a, b) {
+                        return b.length - a.length;
+                    })
+                    .find(function (term) {
+                        return new RegExp("\\b" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(cleanedTerm);
+                    });
 
                 if (matchedTerm) {
                     return definitionBank[matchedTerm];
+                }
+
+                return "";
+            }
+
+            function getGeneralKnowledgeAnswer(text) {
+                const cleanedText = text.replace(/[?]/g, "").trim();
+
+                if (generalKnowledgeBank[cleanedText]) {
+                    return generalKnowledgeBank[cleanedText];
+                }
+
+                const matchedTerm = Object.keys(generalKnowledgeBank).find(function (term) {
+                    return new RegExp("\\b" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(cleanedText);
+                });
+
+                if (matchedTerm) {
+                    return generalKnowledgeBank[matchedTerm];
                 }
 
                 return "";
@@ -1373,6 +1432,12 @@
                     return weatherAnswer;
                 }
 
+                const generalKnowledgeAnswer = getGeneralKnowledgeAnswer(text);
+
+                if (generalKnowledgeAnswer) {
+                    return generalKnowledgeAnswer;
+                }
+
                 const formulaAnswer = getFormulaAnswer(rawText);
 
                 if (formulaAnswer) {
@@ -1388,6 +1453,7 @@
                 if (
                     text.startsWith("what is ") ||
                     text.startsWith("what are ") ||
+                    text.startsWith("who is ") ||
                     text.startsWith("define ") ||
                     text.startsWith("explain ") ||
                     text.startsWith("meaning of ")
@@ -1409,8 +1475,8 @@
                     return fillDynamicText(choose(matchedRule.responses));
                 }
 
-                if (text.startsWith("what is ") || text.startsWith("what are ") || text.startsWith("define ") || text.startsWith("explain ")) {
-                    return "This looks like a definition question, but that exact term is not in my knowledge base yet. Try terms like API, compiler, database, algorithm, function, variable, HTML, CSS, JavaScript, Python, cloud computing, cybersecurity, or machine learning.";
+                if (text.startsWith("what is ") || text.startsWith("what are ") || text.startsWith("who is ") || text.startsWith("define ") || text.startsWith("explain ")) {
+                    return "This looks like a knowledge question, but that exact answer is not in my knowledge base yet. Try questions like capital of India, PM of India, what is Java, what is API, what is compiler, what is database, or what is machine learning.";
                 }
 
                 if (text.includes("how to")) {
