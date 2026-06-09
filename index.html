@@ -19,6 +19,22 @@
             --shadow: 0 24px 70px rgba(23, 32, 51, 0.16);
         }
 
+        body.dark-mode {
+            --page: #111827;
+            --surface: #172033;
+            --surface-soft: #202b3f;
+            --ink: #f4f7fb;
+            --muted: #a8b3c5;
+            --line: #334057;
+            --primary: #55a7ff;
+            --primary-dark: #8cc4ff;
+            --bot: #22304a;
+            --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+            background:
+                radial-gradient(circle at top left, rgba(85, 167, 255, 0.18), transparent 34rem),
+                linear-gradient(135deg, #111827 0%, #172033 60%, #10231f 100%);
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -169,6 +185,30 @@
             background: #edf5ff;
         }
 
+        body.dark-mode .topic-button:hover,
+        body.dark-mode .topic-button:focus-visible,
+        body.dark-mode .quick-row button:hover,
+        body.dark-mode .quick-row button:focus-visible {
+            color: #ffffff;
+            background: #28466c;
+        }
+
+        .tool-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+        }
+
+        .tool-button {
+            min-height: 40px;
+            padding: 9px 10px;
+            color: var(--ink);
+            font-weight: 800;
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
         .stats-grid {
             grid-template-columns: 1fr 1fr;
             margin-top: auto;
@@ -290,6 +330,11 @@
             margin: 0;
         }
 
+        .typing-message {
+            color: var(--muted);
+            font-style: italic;
+        }
+
         .bot-message {
             align-self: flex-start;
             color: var(--ink);
@@ -376,6 +421,52 @@
             border: 1px solid var(--line);
         }
 
+        .mic-button {
+            min-height: 48px;
+            padding: 0 14px;
+            color: var(--primary-dark);
+            font-weight: 800;
+            background: #edf5ff;
+            border: 1px solid #c9dcf5;
+            border-radius: 8px;
+        }
+
+        body.dark-mode .mic-button {
+            color: #ffffff;
+            background: #263b5c;
+            border-color: #3b5579;
+        }
+
+        .explain-panel {
+            padding: 15px 30px;
+            border-top: 1px solid var(--line);
+            background: var(--surface-soft);
+        }
+
+        .explain-panel summary {
+            cursor: pointer;
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        .flow-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 9px;
+            margin-top: 12px;
+        }
+
+        .flow-list span {
+            padding: 10px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 800;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+        }
+
         .clear-button:hover,
         .clear-button:focus-visible {
             background: #edf1f5;
@@ -432,6 +523,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .flow-list {
+                grid-template-columns: 1fr;
+            }
+
             .message {
                 max-width: 94%;
             }
@@ -452,6 +547,13 @@
             <section class="sidebar-section">
                 <p class="section-label">Topics I Know</p>
                 <div class="topic-list">
+                    <button type="button" class="topic-button" data-message="science questions">Science</button>
+                    <button type="button" class="topic-button" data-message="math formulas">Math</button>
+                    <button type="button" class="topic-button" data-message="computer questions">Computer</button>
+                    <button type="button" class="topic-button" data-message="general knowledge questions">General Knowledge</button>
+                    <button type="button" class="topic-button" data-message="english grammar">English</button>
+                    <button type="button" class="topic-button" data-message="career guidance">Career</button>
+                    <button type="button" class="topic-button" data-message="interview questions">Interview Questions</button>
                     <button type="button" class="topic-button" data-message="what is if else statement">If-Else Statement</button>
                     <button type="button" class="topic-button" data-message="what is for loop">For Loop</button>
                     <button type="button" class="topic-button" data-message="what is API">API Definition</button>
@@ -459,7 +561,17 @@
                     <button type="button" class="topic-button" data-message="what is cybersecurity">Cybersecurity</button>
                     <button type="button" class="topic-button" data-message="what is cloud computing">Cloud Computing</button>
                     <button type="button" class="topic-button" data-message="what is today's weather">Weather Help</button>
-                    <button type="button" class="topic-button" data-message="calculate 25 + 15">Simple Math</button>
+                    <button type="button" class="topic-button" data-message="calculate sqrt(144) + 25%">Advanced Math</button>
+                </div>
+            </section>
+
+            <section class="sidebar-section">
+                <p class="section-label">Tools</p>
+                <div class="tool-row">
+                    <button type="button" class="tool-button" id="themeToggle">Dark Mode</button>
+                    <button type="button" class="tool-button" id="voiceToggle">Voice On</button>
+                    <button type="button" class="tool-button" id="exportChat">Export Chat</button>
+                    <button type="button" class="tool-button" id="clearHistory">Clear Saved</button>
                 </div>
             </section>
 
@@ -480,7 +592,7 @@
                     </div>
                     <div class="capability-card">
                         <strong>Utilities</strong>
-                        <span>Time, date, math, weather</span>
+                        <span>Time, date, calculator, weather</span>
                     </div>
                 </div>
             </section>
@@ -512,17 +624,27 @@
 
             <div class="system-bar">
                 <span>Rule Engine</span>
-                <span>Definition Bank</span>
-                <span>Smart Fallbacks</span>
+                <span>Live Weather</span>
+                <span>Voice + History</span>
             </div>
 
             <div class="chat-window" id="chatWindow" aria-live="polite" aria-label="Chat messages"></div>
 
+            <details class="explain-panel">
+                <summary>How Sky Works</summary>
+                <div class="flow-list">
+                    <span>User Input</span>
+                    <span>Normalize Text</span>
+                    <span>Match Rule/API</span>
+                    <span>Return Response</span>
+                </div>
+            </details>
+
             <div class="quick-row" aria-label="Quick prompts">
                 <button type="button" data-message="what is if else statement">If-Else</button>
                 <button type="button" data-message="what is API">API</button>
-                <button type="button" data-message="calculate 12 * 8">Calculate</button>
-                <button type="button" data-message="what is today's weather">Weather</button>
+                <button type="button" data-message="calculate sqrt(144) + 25%">Calculate</button>
+                <button type="button" data-message="weather in Mumbai">Weather</button>
             </div>
 
             <form class="composer" id="chatForm">
@@ -530,10 +652,11 @@
                     id="userInput"
                     type="text"
                     autocomplete="off"
-                    placeholder="Ask: What is API? What is for loop? Calculate 12 * 8"
+                    placeholder="Ask: What is API? Calculate sqrt(144) + 25%"
                     aria-label="Type your message"
                 >
                 <button type="submit" class="send-button">Send</button>
+                <button type="button" class="mic-button" id="voiceInput">Voice</button>
                 <button type="button" class="clear-button" id="clearChat">Clear</button>
             </form>
         </section>
@@ -546,6 +669,15 @@
             const userInput = document.querySelector("#userInput");
             const clearChatButton = document.querySelector("#clearChat");
             const promptButtons = document.querySelectorAll("[data-message]");
+            const themeToggle = document.querySelector("#themeToggle");
+            const voiceToggle = document.querySelector("#voiceToggle");
+            const voiceInputButton = document.querySelector("#voiceInput");
+            const exportChatButton = document.querySelector("#exportChat");
+            const clearHistoryButton = document.querySelector("#clearHistory");
+            const storageKey = "sky-chat-history";
+            const themeKey = "sky-theme";
+            let voiceEnabled = true;
+            let chatHistory = [];
 
             const rules = [
                 {
@@ -579,8 +711,43 @@
                 {
                     patterns: ["help", "what can you do", "features", "commands", "capabilities"],
                     responses: [
-                        "I can answer definitions, coding concepts, web development questions, AI basics, computer science terms, study help, time, date, simple math, weather guidance, and project questions.",
-                        "Try asking: what is API, what is compiler, what is cloud computing, what is if-else, what is for loop, calculate 12 * 8, or what is today's weather."
+                        "I can answer definitions, coding concepts, science, math, computer, general knowledge, English, career, interview questions, live weather, voice input, chat history, export, and advanced calculations.",
+                        "Try asking: what is API, weather in Mumbai, solve x + 5 = 10, area of circle radius 5, simple interest, percentage marks, or interview questions."
+                    ]
+                },
+                {
+                    patterns: ["science questions", "science", "physics", "chemistry", "biology"],
+                    responses: [
+                        "Science studies the natural world through observation, experiments, and evidence. You can ask me about physics, chemistry, biology, energy, force, atoms, cells, and environment.",
+                        "Examples: what is force, what is atom, what is photosynthesis, what is electricity."
+                    ]
+                },
+                {
+                    patterns: ["general knowledge", "gk", "capital", "country"],
+                    responses: [
+                        "General knowledge includes facts about countries, history, science, current affairs, geography, and important people.",
+                        "Example: India is a country in South Asia, and New Delhi is the capital of India."
+                    ]
+                },
+                {
+                    patterns: ["english", "grammar", "noun", "verb", "adjective", "essay"],
+                    responses: [
+                        "English grammar helps us write and speak correctly. A noun names a person, place, or thing; a verb shows action; an adjective describes a noun.",
+                        "For English improvement, practice vocabulary, grammar rules, reading, and short writing daily."
+                    ]
+                },
+                {
+                    patterns: ["career", "job", "future", "guidance"],
+                    responses: [
+                        "Career guidance starts with your interests, skills, education, and goals. For technology, learn programming, build projects, upload them to GitHub, and practice interviews.",
+                        "A strong career plan includes learning skills, making projects, improving communication, and preparing a resume."
+                    ]
+                },
+                {
+                    patterns: ["interview", "interview questions", "hr questions"],
+                    responses: [
+                        "Common interview questions include: Tell me about yourself, explain your project, what are your strengths, why should we select you, and what did you learn from this project?",
+                        "For your chatbot project, explain: it normalizes user input, matches patterns, selects a predefined response, and shows the answer in a clean web interface."
                     ]
                 },
                 {
@@ -830,8 +997,8 @@
                 {
                     patterns: ["math", "calculate", "plus", "minus"],
                     responses: [
-                        "I can explain simple math ideas, but this version does not solve full calculations yet.",
-                        "Math support can be added as a future improvement using more rules or JavaScript functions."
+                        "I can solve many calculations. Try examples like calculate 12 + 8, calculate (20 - 5) * 3, calculate sqrt(144), calculate 2 power 5, or calculate 25%.",
+                        "My calculator supports addition, subtraction, multiplication, division, brackets, decimals, percentages, square root, and powers."
                     ]
                 },
                 {
@@ -903,8 +1070,37 @@
                 "weather": "Weather describes the current condition of the atmosphere, including temperature, rain, wind, clouds, and humidity."
             };
 
+            const spellingCorrections = {
+                "javscript": "javascript",
+                "java script": "javascript",
+                "pyhton": "python",
+                "pthon": "python",
+                "htlm": "html",
+                "cs": "css",
+                "databse": "database",
+                "algoritm": "algorithm",
+                "algorithum": "algorithm",
+                "funtion": "function",
+                "fuction": "function",
+                "varible": "variable",
+                "variale": "variable",
+                "ifelse": "if else",
+                "forloop": "for loop",
+                "weater": "weather",
+                "wheather": "weather",
+                "calcuate": "calculate",
+                "calcualte": "calculate"
+            };
+
             function normalize(text) {
-                return text.toLowerCase().trim().replace(/[^\w\s?]/g, "");
+                let normalized = text.toLowerCase().trim().replace(/[^\w\s?]/g, "");
+
+                Object.keys(spellingCorrections).forEach(function (wrongWord) {
+                    const pattern = new RegExp("\\b" + wrongWord + "\\b", "g");
+                    normalized = normalized.replace(pattern, spellingCorrections[wrongWord]);
+                });
+
+                return normalized;
             }
 
             function choose(items) {
@@ -921,6 +1117,75 @@
                 });
 
                 return response.replace("{time}", time).replace("{date}", date);
+            }
+
+            function getWeatherCodeText(code) {
+                const weatherCodes = {
+                    0: "clear sky",
+                    1: "mainly clear",
+                    2: "partly cloudy",
+                    3: "overcast",
+                    45: "foggy",
+                    48: "foggy with frost",
+                    51: "light drizzle",
+                    53: "moderate drizzle",
+                    55: "dense drizzle",
+                    61: "slight rain",
+                    63: "moderate rain",
+                    65: "heavy rain",
+                    71: "slight snow",
+                    73: "moderate snow",
+                    75: "heavy snow",
+                    80: "rain showers",
+                    81: "moderate rain showers",
+                    82: "heavy rain showers",
+                    95: "thunderstorm"
+                };
+
+                return weatherCodes[code] || "weather condition available";
+            }
+
+            function getLocationFromWeatherQuestion(text) {
+                const match = text.match(/(?:weather|temperature|rain)(?:\s+today)?(?:\s+in|\s+at|\s+for)?\s+([a-z\s]+)$/);
+
+                if (!match) {
+                    return "";
+                }
+
+                return match[1]
+                    .replace(/\btoday\b/g, "")
+                    .replace(/\bcurrent\b/g, "")
+                    .trim();
+            }
+
+            async function getLiveWeatherAnswer(message) {
+                const text = normalize(message);
+
+                if (!text.includes("weather") && !text.includes("temperature")) {
+                    return "";
+                }
+
+                const location = getLocationFromWeatherQuestion(text) || "Mumbai";
+
+                try {
+                    const geoUrl = "https://geocoding-api.open-meteo.com/v1/search?count=1&name=" + encodeURIComponent(location);
+                    const geoResponse = await fetch(geoUrl);
+                    const geoData = await geoResponse.json();
+
+                    if (!geoData.results || !geoData.results.length) {
+                        return "I could not find that location. Try asking like: weather in Mumbai, weather in Delhi, or weather in Pune.";
+                    }
+
+                    const place = geoData.results[0];
+                    const weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + place.latitude + "&longitude=" + place.longitude + "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code";
+                    const weatherResponse = await fetch(weatherUrl);
+                    const weatherData = await weatherResponse.json();
+                    const current = weatherData.current;
+
+                    return "Current weather in " + place.name + ": " + current.temperature_2m + "°C, " + getWeatherCodeText(current.weather_code) + ", humidity " + current.relative_humidity_2m + "%, wind speed " + current.wind_speed_10m + " km/h.";
+                } catch (error) {
+                    return "I could not fetch live weather right now. Please check your internet connection, or try again later.";
+                }
             }
 
             function getDefinitionAnswer(text) {
@@ -949,18 +1214,45 @@
             }
 
             function getMathAnswer(text) {
-                const mathText = text
-                    .replace("calculate", "")
-                    .replace("solve", "")
-                    .replace("what is", "")
-                    .replace("plus", "+")
-                    .replace("minus", "-")
-                    .replace("times", "*")
-                    .replace("multiplied by", "*")
-                    .replace("divided by", "/")
+                let mathText = text
+                    .replace(/^calculate\s+/, "")
+                    .replace(/^solve\s+/, "")
+                    .replace(/^what is\s+/, "")
+                    .replace(/^what's\s+/, "")
+                    .replace(/\bplus\b/g, "+")
+                    .replace(/\bminus\b/g, "-")
+                    .replace(/\btimes\b/g, "*")
+                    .replace(/\binto\b/g, "*")
+                    .replace(/\bmultiplied by\b/g, "*")
+                    .replace(/\bdivide by\b/g, "/")
+                    .replace(/\bdivided by\b/g, "/")
+                    .replace(/\bover\b/g, "/")
+                    .replace(/\bpower of\b/g, "^")
+                    .replace(/\bto the power of\b/g, "^")
+                    .replace(/\bpower\b/g, "^")
+                    .replace(/\bsquare root of\b/g, "sqrt")
+                    .replace(/\bsquare root\b/g, "sqrt")
+                    .replace(/\bsquare of\s+(\d+(?:\.\d+)?)/g, "$1^2")
+                    .replace(/\bcube of\s+(\d+(?:\.\d+)?)/g, "$1^3")
                     .trim();
 
-                if (!/^[0-9+\-*/().\s]+$/.test(mathText) || !/[+\-*/]/.test(mathText)) {
+                if (!/[0-9]/.test(mathText)) {
+                    return "";
+                }
+
+                mathText = mathText
+                    .replace(/(\d+(?:\.\d+)?)\s*%\s*of\s*(\d+(?:\.\d+)?)/g, "(($1/100)*$2)")
+                    .replace(/(\d+(?:\.\d+)?)\s*%/g, "($1/100)")
+                    .replace(/\bsqrt\s+(\d+(?:\.\d+)?)/g, "sqrt($1)")
+                    .replace(/\^/g, "**")
+                    .replace(/\bsqrt\s*\(/g, "Math.sqrt(")
+                    .replace(/\bpi\b/g, "Math.PI");
+
+                if (!/[+\-*/()%.]|\*\*|Math\.sqrt|Math\.PI/.test(mathText)) {
+                    return "";
+                }
+
+                if (!/^[0-9+\-*/().\s%MathsqrtPI]+$/.test(mathText)) {
                     return "";
                 }
 
@@ -971,15 +1263,74 @@
                         return "This calculation does not produce a valid number.";
                     }
 
-                    return "The answer is " + answer + ".";
+                    const formattedAnswer = Number.isInteger(answer)
+                        ? String(answer)
+                        : String(Number(answer.toFixed(8)));
+
+                    return "The answer is " + formattedAnswer + ".";
                 } catch (error) {
-                    return "";
+                    return "I could not solve that calculation. Try using numbers with +, -, *, /, brackets, %, sqrt(), or power.";
                 }
             }
 
-            function getBotResponse(message) {
+            function getFormulaAnswer(text) {
+                const equationMatch = text.match(/solve\s+x\s*([+\-])\s*(\d+(?:\.\d+)?)\s*=\s*(\d+(?:\.\d+)?)/);
+
+                if (equationMatch) {
+                    const operator = equationMatch[1];
+                    const number = Number(equationMatch[2]);
+                    const result = Number(equationMatch[3]);
+                    const x = operator === "+" ? result - number : result + number;
+
+                    return "Solving x " + operator + " " + number + " = " + result + ", the value of x is " + x + ".";
+                }
+
+                const circleMatch = text.match(/area of circle radius\s+(\d+(?:\.\d+)?)/);
+
+                if (circleMatch) {
+                    const radius = Number(circleMatch[1]);
+                    const area = Math.PI * radius * radius;
+                    return "Area of circle = pi x r x r. For radius " + radius + ", area is " + Number(area.toFixed(2)) + " square units.";
+                }
+
+                const simpleInterestMatch = text.match(/simple interest.*principal\s+(\d+(?:\.\d+)?).*rate\s+(\d+(?:\.\d+)?).*time\s+(\d+(?:\.\d+)?)/);
+
+                if (simpleInterestMatch) {
+                    const principal = Number(simpleInterestMatch[1]);
+                    const rate = Number(simpleInterestMatch[2]);
+                    const time = Number(simpleInterestMatch[3]);
+                    const interest = (principal * rate * time) / 100;
+                    return "Simple Interest = (P x R x T) / 100. The simple interest is " + Number(interest.toFixed(2)) + ".";
+                }
+
+                const marksMatch = text.match(/percentage marks\s+(\d+(?:\.\d+)?)\s*(?:out of|\/)\s*(\d+(?:\.\d+)?)/);
+
+                if (marksMatch) {
+                    const marks = Number(marksMatch[1]);
+                    const total = Number(marksMatch[2]);
+                    const percentage = (marks / total) * 100;
+                    return "Your percentage is " + Number(percentage.toFixed(2)) + "%.";
+                }
+
+                return "";
+            }
+
+            async function getBotResponse(message) {
+                const rawText = message.toLowerCase().trim();
                 const text = normalize(message);
-                const mathAnswer = getMathAnswer(text);
+                const weatherAnswer = await getLiveWeatherAnswer(message);
+
+                if (weatherAnswer) {
+                    return weatherAnswer;
+                }
+
+                const formulaAnswer = getFormulaAnswer(rawText);
+
+                if (formulaAnswer) {
+                    return formulaAnswer;
+                }
+
+                const mathAnswer = getMathAnswer(rawText);
 
                 if (mathAnswer) {
                     return mathAnswer;
@@ -1020,7 +1371,23 @@
                 return fillDynamicText(choose(fallbackResponses));
             }
 
-            function addMessage(text, sender) {
+            function saveHistory() {
+                localStorage.setItem(storageKey, JSON.stringify(chatHistory));
+            }
+
+            function speak(text) {
+                if (!voiceEnabled || !("speechSynthesis" in window)) {
+                    return;
+                }
+
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.95;
+                utterance.pitch = 1;
+                window.speechSynthesis.speak(utterance);
+            }
+
+            function addMessage(text, sender, shouldSave) {
                 const message = document.createElement("article");
                 const paragraph = document.createElement("p");
 
@@ -1029,9 +1396,34 @@
                 message.appendChild(paragraph);
                 chatWindow.appendChild(message);
                 chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                if (shouldSave !== false) {
+                    chatHistory.push({ sender: sender, text: text });
+                    saveHistory();
+                }
             }
 
-            function sendMessage(text) {
+            function showTyping() {
+                const message = document.createElement("article");
+                const paragraph = document.createElement("p");
+
+                message.className = "message bot-message typing-message";
+                message.id = "typingMessage";
+                paragraph.textContent = "Sky is typing...";
+                message.appendChild(paragraph);
+                chatWindow.appendChild(message);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            function hideTyping() {
+                const typingMessage = document.querySelector("#typingMessage");
+
+                if (typingMessage) {
+                    typingMessage.remove();
+                }
+            }
+
+            async function sendMessage(text) {
                 const message = text.trim();
 
                 if (!message) {
@@ -1041,16 +1433,76 @@
 
                 addMessage(message, "user");
                 userInput.value = "";
+                showTyping();
 
-                window.setTimeout(function () {
-                    addMessage(getBotResponse(message), "bot");
-                }, 250);
+                window.setTimeout(async function () {
+                    const response = await getBotResponse(message);
+                    hideTyping();
+                    addMessage(response, "bot");
+                    speak(response);
+                }, 450);
             }
 
             function resetChat() {
                 chatWindow.innerHTML = "";
-                addMessage("Hello! I am Sky, your professional rule-based AI chatbot. Ask me technical questions like if-else, for loop, HTML, JavaScript, AI, or general questions like time, date, and weather help.", "bot");
+                chatHistory = [];
+                addMessage("Hello! I am Sky, your advanced rule-based AI chatbot. Ask definitions, calculations, weather in a city, voice questions, career help, English, science, or interview questions.", "bot");
                 userInput.focus();
+            }
+
+            function loadHistory() {
+                const savedHistory = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+                if (savedHistory.length) {
+                    chatHistory = savedHistory;
+                    chatWindow.innerHTML = "";
+                    savedHistory.forEach(function (item) {
+                        addMessage(item.text, item.sender, false);
+                    });
+                    return;
+                }
+
+                resetChat();
+            }
+
+            function exportChat() {
+                const content = chatHistory
+                    .map(function (item) {
+                        return (item.sender === "user" ? "You: " : "Sky: ") + item.text;
+                    })
+                    .join("\n");
+                const blob = new Blob([content], { type: "text/plain" });
+                const link = document.createElement("a");
+
+                link.href = URL.createObjectURL(blob);
+                link.download = "sky-chat-history.txt";
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+
+            function startVoiceInput() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+                if (!SpeechRecognition) {
+                    addMessage("Voice input is not supported in this browser. Please use Chrome or Edge for voice input.", "bot");
+                    return;
+                }
+
+                const recognition = new SpeechRecognition();
+                recognition.lang = "en-IN";
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+                recognition.start();
+
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    userInput.value = transcript;
+                    sendMessage(transcript);
+                };
+
+                recognition.onerror = function () {
+                    addMessage("I could not hear clearly. Please try voice input again.", "bot");
+                };
             }
 
             chatForm.addEventListener("submit", function (event) {
@@ -1060,13 +1512,41 @@
 
             clearChatButton.addEventListener("click", resetChat);
 
+            themeToggle.addEventListener("click", function () {
+                document.body.classList.toggle("dark-mode");
+                const isDark = document.body.classList.contains("dark-mode");
+                themeToggle.textContent = isDark ? "Light Mode" : "Dark Mode";
+                localStorage.setItem(themeKey, isDark ? "dark" : "light");
+            });
+
+            voiceToggle.addEventListener("click", function () {
+                voiceEnabled = !voiceEnabled;
+                voiceToggle.textContent = voiceEnabled ? "Voice On" : "Voice Off";
+                if (!voiceEnabled && "speechSynthesis" in window) {
+                    window.speechSynthesis.cancel();
+                }
+            });
+
+            voiceInputButton.addEventListener("click", startVoiceInput);
+            exportChatButton.addEventListener("click", exportChat);
+
+            clearHistoryButton.addEventListener("click", function () {
+                localStorage.removeItem(storageKey);
+                resetChat();
+            });
+
             promptButtons.forEach(function (button) {
                 button.addEventListener("click", function () {
                     sendMessage(button.dataset.message);
                 });
             });
 
-            resetChat();
+            if (localStorage.getItem(themeKey) === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.textContent = "Light Mode";
+            }
+
+            loadHistory();
         });
     </script>
 </body>

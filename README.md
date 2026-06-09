@@ -13,8 +13,14 @@ The project is intentionally beginner-friendly while still being organized like 
 - Rule-based responses using pattern matching
 - Professional website interface
 - Advanced definition bank for common technical terms
-- Simple calculator support for basic arithmetic
-- Weather guidance for offline mode
+- Advanced calculator support for arithmetic, brackets, powers, square roots, and percentages
+- Live weather lookup using a no-key weather API
+- Voice input and voice output in supported browsers
+- Dark mode and light mode
+- Saved chat history using browser storage
+- Export chat history as a text file
+- Typing animation for bot replies
+- Spelling correction for common mistakes
 - Clean project structure
 - Easy-to-edit chatbot rules
 - Conversation loop in the terminal
@@ -94,6 +100,15 @@ what is compiler
 what is cybersecurity
 what is cloud computing
 calculate 12 * 8
+calculate (20 - 5) * 3
+calculate sqrt(144)
+calculate 2 power 5
+calculate 25% of 200
+solve x + 5 = 10
+area of circle radius 5
+simple interest principal 1000 rate 5 time 2
+percentage marks 420 out of 500
+weather in Mumbai
 what is today's weather
 ```
 
