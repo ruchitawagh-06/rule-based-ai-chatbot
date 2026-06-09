@@ -371,6 +371,19 @@
             margin: 0;
         }
 
+        .message pre {
+            max-width: 100%;
+            margin: 10px 0 0;
+            overflow-x: auto;
+            padding: 12px;
+            color: #eaf4ff;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.45;
+            background: #172033;
+            border-radius: 8px;
+        }
+
         .typing-message {
             color: var(--muted);
             font-style: italic;
@@ -690,8 +703,9 @@
             </details>
 
             <div class="quick-row" aria-label="Quick prompts">
-                <button type="button" data-message="what is if else statement">If-Else</button>
+                <button type="button" data-message="give me code for if else in python">If-Else Code</button>
                 <button type="button" data-message="what is API">API</button>
+                <button type="button" data-message="give me code for for loop in python">Loop Code</button>
                 <button type="button" data-message="calculate sqrt(144) + 25%">Calculate</button>
                 <button type="button" data-message="weather in Mumbai">Weather</button>
             </div>
@@ -1139,6 +1153,75 @@
                 "who is apj abdul kalam": "Dr. A. P. J. Abdul Kalam was a scientist and the 11th President of India. He is also known as the Missile Man of India."
             };
 
+            const codeExamples = [
+                {
+                    keys: ["hello world", "hello in python", "print hello"],
+                    title: "Python Hello World",
+                    explanation: "This Python code prints a simple message on the screen.",
+                    code: "print(\"Hello, World!\")"
+                },
+                {
+                    keys: ["if else", "if-else", "if statement", "pass fail"],
+                    title: "Python If-Else Statement",
+                    explanation: "This code checks a condition and prints a different result based on marks.",
+                    code: "marks = 75\n\nif marks >= 40:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")"
+                },
+                {
+                    keys: ["for loop", "for-loop", "print 1 to 10"],
+                    title: "Python For Loop",
+                    explanation: "This code repeats the print statement from 1 to 10.",
+                    code: "for number in range(1, 11):\n    print(number)"
+                },
+                {
+                    keys: ["while loop", "while-loop"],
+                    title: "Python While Loop",
+                    explanation: "This code keeps running while the condition is true.",
+                    code: "count = 1\n\nwhile count <= 5:\n    print(count)\n    count += 1"
+                },
+                {
+                    keys: ["function", "python function", "add function"],
+                    title: "Python Function",
+                    explanation: "This function accepts two numbers and returns their sum.",
+                    code: "def add_numbers(a, b):\n    return a + b\n\nresult = add_numbers(10, 5)\nprint(result)"
+                },
+                {
+                    keys: ["list", "array", "python list"],
+                    title: "Python List Example",
+                    explanation: "A list stores multiple values in one variable.",
+                    code: "students = [\"Amit\", \"Riya\", \"Prem\"]\n\nfor student in students:\n    print(student)"
+                },
+                {
+                    keys: ["largest number", "maximum number"],
+                    title: "Find Largest Number in Python",
+                    explanation: "This code compares three numbers and prints the largest.",
+                    code: "a = 10\nb = 25\nc = 15\n\nif a >= b and a >= c:\n    print(\"Largest:\", a)\nelif b >= a and b >= c:\n    print(\"Largest:\", b)\nelse:\n    print(\"Largest:\", c)"
+                },
+                {
+                    keys: ["even odd", "odd even"],
+                    title: "Even or Odd Number in Python",
+                    explanation: "This code checks whether a number is even or odd.",
+                    code: "number = 7\n\nif number % 2 == 0:\n    print(\"Even number\")\nelse:\n    print(\"Odd number\")"
+                },
+                {
+                    keys: ["factorial"],
+                    title: "Factorial Program in Python",
+                    explanation: "This code calculates factorial using a loop.",
+                    code: "number = 5\nfactorial = 1\n\nfor i in range(1, number + 1):\n    factorial *= i\n\nprint(\"Factorial:\", factorial)"
+                },
+                {
+                    keys: ["html button", "button in html"],
+                    title: "HTML Button Example",
+                    explanation: "This creates a simple button on a web page.",
+                    code: "<button>Click Me</button>"
+                },
+                {
+                    keys: ["javascript click", "button click"],
+                    title: "JavaScript Button Click",
+                    explanation: "This JavaScript code shows a message when a button is clicked.",
+                    code: "<button onclick=\"showMessage()\">Click Me</button>\n\n<script>\nfunction showMessage() {\n    alert(\"Button clicked!\");\n}\n</script>"
+                }
+            ];
+
             const spellingCorrections = {
                 "javscript": "javascript",
                 "java script": "javascript",
@@ -1321,6 +1404,30 @@
                 return "";
             }
 
+            function getCodeAnswer(text) {
+                const wantsCode =
+                    text.includes("code") ||
+                    text.includes("program") ||
+                    text.includes("write") ||
+                    text.includes("example");
+
+                if (!wantsCode) {
+                    return "";
+                }
+
+                const matchedExample = codeExamples.find(function (example) {
+                    return example.keys.some(function (key) {
+                        return text.includes(key);
+                    });
+                });
+
+                if (!matchedExample) {
+                    return "I can provide code examples for hello world, if-else, for loop, while loop, function, list, largest number, even odd, factorial, HTML button, and JavaScript click.";
+                }
+
+                return matchedExample.title + "\n" + matchedExample.explanation + "\n```code\n" + matchedExample.code + "\n```";
+            }
+
             function getMathAnswer(text) {
                 let mathText = text
                     .replace(/^calculate\s+/, "")
@@ -1438,6 +1545,12 @@
                     return generalKnowledgeAnswer;
                 }
 
+                const codeAnswer = getCodeAnswer(text);
+
+                if (codeAnswer) {
+                    return codeAnswer;
+                }
+
                 const formulaAnswer = getFormulaAnswer(rawText);
 
                 if (formulaAnswer) {
@@ -1505,10 +1618,18 @@
             function addMessage(text, sender, shouldSave) {
                 const message = document.createElement("article");
                 const paragraph = document.createElement("p");
+                const codeMatch = text.match(/```code\n([\s\S]*?)\n```/);
 
                 message.className = "message " + sender + "-message";
-                paragraph.textContent = text;
+                paragraph.textContent = codeMatch ? text.replace(codeMatch[0], "").trim() : text;
                 message.appendChild(paragraph);
+
+                if (codeMatch) {
+                    const codeBlock = document.createElement("pre");
+                    codeBlock.textContent = codeMatch[1];
+                    message.appendChild(codeBlock);
+                }
+
                 chatWindow.appendChild(message);
                 chatWindow.scrollTop = chatWindow.scrollHeight;
 
