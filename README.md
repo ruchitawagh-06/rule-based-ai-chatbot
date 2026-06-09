@@ -11,6 +11,7 @@ The project is intentionally beginner-friendly while still being organized like 
 ## Features
 
 - Rule-based responses using pattern matching
+- Professional website interface
 - Clean project structure
 - Easy-to-edit chatbot rules
 - Conversation loop in the terminal
@@ -28,6 +29,9 @@ rule-based-ai-chatbot/
 │   └── rules.py
 ├── tests/
 │   └── test_chatbot.py
+├── index.html
+├── style.css
+├── script.js
 ├── main.py
 ├── requirements.txt
 ├── .gitignore
@@ -66,6 +70,18 @@ pip install -r requirements.txt
 ```
 
 ## Run the Chatbot
+
+### Website Version
+
+Open this file in your browser:
+
+```text
+index.html
+```
+
+You can also double-click `index.html` from the project folder.
+
+### Python Terminal Version
 
 ```bash
 python main.py

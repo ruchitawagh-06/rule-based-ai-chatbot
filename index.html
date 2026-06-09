@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Rule-Based AI Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <main class="app">
+        <aside class="sidebar" aria-label="Chatbot information">
+            <div class="brand">
+                <div class="brand-mark">N</div>
+                <div>
+                    <p class="brand-name">Nexus</p>
+                    <p class="brand-subtitle">Rule Engine v1.0</p>
+                </div>
+            </div>
+
+            <section class="sidebar-section">
+                <p class="section-label">Topics I Know</p>
+                <div class="topic-list">
+                    <button type="button" class="topic-button" data-message="hello">Greetings</button>
+                    <button type="button" class="topic-button" data-message="who are you">Identity</button>
+                    <button type="button" class="topic-button" data-message="what is ai">Artificial Intelligence</button>
+                    <button type="button" class="topic-button" data-message="what is chatbot">Chatbots</button>
+                    <button type="button" class="topic-button" data-message="python programming">Programming</button>
+                    <button type="button" class="topic-button" data-message="what time is it">Time</button>
+                    <button type="button" class="topic-button" data-message="what is today's date">Date</button>
+                    <button type="button" class="topic-button" data-message="tell me a joke">Jokes</button>
+                </div>
+            </section>
+
+            <section class="sidebar-section stats-grid">
+                <div>
+                    <span>Rules</span>
+                    <strong>12</strong>
+                </div>
+                <div>
+                    <span>Status</span>
+                    <strong>Active</strong>
+                </div>
+            </section>
+        </aside>
+
+        <section class="chat-card" aria-label="Rule-based AI chatbot">
+            <header class="chat-header">
+                <div>
+                    <p class="eyebrow">Artificial Intelligence Project</p>
+                    <h1>Rule-Based AI Chatbot</h1>
+                    <p class="header-copy">A professional rule-based chatbot using pattern matching and predefined responses.</p>
+                </div>
+                <div class="status-pill">
+                    <span class="status-dot"></span>
+                    Online
+                </div>
+            </header>
+
+            <div class="system-bar">
+                <span>Pattern Matching</span>
+                <span>If-Else Logic</span>
+                <span>Conversation Flow</span>
+            </div>
+
+            <div class="chat-window" id="chatWindow" aria-live="polite" aria-label="Chat messages"></div>
+
+            <div class="quick-row" aria-label="Quick prompts">
+                <button type="button" data-message="what is ai">What is AI?</button>
+                <button type="button" data-message="tell me a joke">Tell me a joke</button>
+                <button type="button" data-message="what can you do">What can you do?</button>
+                <button type="button" data-message="what time is it">Time</button>
+            </div>
+
+            <form class="composer" id="chatForm">
+                <input
+                    id="userInput"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Ask something like: What is AI?"
+                    aria-label="Type your message"
+                >
+                <button type="submit" class="send-button">Send</button>
+                <button type="button" class="clear-button" id="clearChat">Clear</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
